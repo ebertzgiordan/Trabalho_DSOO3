@@ -51,6 +51,8 @@ public class MDI extends javax.swing.JFrame {
         helpMenu = new javax.swing.JMenu();
         contentMenuItem = new javax.swing.JMenuItem();
         aboutMenuItem = new javax.swing.JMenuItem();
+        editMenu2 = new javax.swing.JMenu();
+        cutMenuItem2 = new javax.swing.JMenuItem();
         editMenu1 = new javax.swing.JMenu();
         cutMenuItem1 = new javax.swing.JMenuItem();
 
@@ -113,6 +115,20 @@ public class MDI extends javax.swing.JFrame {
 
         menuBar.add(helpMenu);
 
+        editMenu2.setMnemonic('e');
+        editMenu2.setText("Relatorio");
+
+        cutMenuItem2.setMnemonic('t');
+        cutMenuItem2.setText("Gerar Relatório");
+        cutMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cutMenuItem2ActionPerformed(evt);
+            }
+        });
+        editMenu2.add(cutMenuItem2);
+
+        menuBar.add(editMenu2);
+
         editMenu1.setMnemonic('e');
         editMenu1.setText("Sair");
 
@@ -133,11 +149,11 @@ public class MDI extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(desktopPane, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .addComponent(desktopPane, javax.swing.GroupLayout.DEFAULT_SIZE, 666, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(desktopPane, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
+            .addComponent(desktopPane, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
         );
 
         pack();
@@ -180,6 +196,13 @@ public class MDI extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_cutMenuItem1ActionPerformed
 
+    private void cutMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cutMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        Gerar_Relatorio gerar = new Gerar_Relatorio();
+        desktopPane.add(gerar);
+        gerar.setVisible(true);
+    }//GEN-LAST:event_cutMenuItem2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -201,9 +224,11 @@ public class MDI extends javax.swing.JFrame {
     private javax.swing.JMenuItem contentMenuItem;
     private javax.swing.JMenuItem cutMenuItem;
     private javax.swing.JMenuItem cutMenuItem1;
+    private javax.swing.JMenuItem cutMenuItem2;
     private javax.swing.JDesktopPane desktopPane;
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenu editMenu1;
+    private javax.swing.JMenu editMenu2;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JMenuBar menuBar;

@@ -324,21 +324,23 @@ public class Atribuicao_VLANs extends javax.swing.JInternalFrame {
 
             if (tipo.equalsIgnoreCase("HYBRID")) {
                 String[] partes = entradaVlan.split(",");
-                if (partes.length != 2) {
-                    JOptionPane.showMessageDialog(this, "Para HYBRID, informe 2 VLANs separadas por vírgula (ex: 10,20)");
+
+                if (partes.length < 2) {
+                    JOptionPane.showMessageDialog(this, "Para HYBRID, informe pelo menos duas VLANs (ex: 10,20)");
                     return;
                 }
 
-                int vlanUntagged = Integer.parseInt(partes[0].trim());
-                int vlanTagged = Integer.parseInt(partes[1].trim());
+                for (int i = 0; i < partes.length; i++) {
+                    int vlanId = Integer.parseInt(partes[i].trim());
 
-                if (!vlanController.existeVlan(vlanUntagged) || !vlanController.existeVlan(vlanTagged)) {
-                    JOptionPane.showMessageDialog(this, "Uma das VLANs não existe.");
-                    return;
+                    if (!vlanController.existeVlan(vlanId)) {
+                        JOptionPane.showMessageDialog(this, "A VLAN " + vlanId + " não existe.");
+                        return;
+                    }
+
+                    String modo = (i == 0) ? "UNTAGGED" : "TAGGED";
+                    portaVlanController.atribuirVlan(portaId, vlanId, modo);
                 }
-
-                portaVlanController.atribuirVlan(portaId, vlanUntagged, "UNTAGGED");
-                portaVlanController.atribuirVlan(portaId, vlanTagged, "TAGGED");
 
                 JOptionPane.showMessageDialog(this, "VLANs atribuídas para porta HYBRID.");
 
