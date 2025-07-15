@@ -1,4 +1,5 @@
 Gerenciador de VLANs com Interface Swing e SQLite
+
 ✨ Visão Geral
 Este sistema tem como objetivo permitir o gerenciamento de VLANs em um ambiente com switches, portas e usuários com diferentes níveis de acesso. Desenvolvido em Java com interface Swing e banco de dados SQLite, o sistema permite:
 Cadastro de switches e geração automática de portas
