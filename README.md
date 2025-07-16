@@ -1,25 +1,88 @@
-Gerenciador de VLANs com Interface Swing e SQLite
+# 📘 Sistema de Gerenciamento de VLANs para Switches
 
-✨ Visão Geral
-Este sistema tem como objetivo permitir o gerenciamento de VLANs em um ambiente com switches, portas e usuários com diferentes níveis de acesso. Desenvolvido em Java com interface Swing e banco de dados SQLite, o sistema permite:
-Cadastro de switches e geração automática de portas
+Este projeto tem como objetivo simular um sistema de gerenciamento de VLANs com controle de switches, portas, VLANs e usuários. Ele utiliza **interface gráfica em Java (Swing)** e **persistência de dados com SQLite**.
 
+---
 
-Cadastro de VLANs
+## 🛠️ Tecnologias Utilizadas
 
+- Java (JDK 17+)
+- Swing (GUI)
+- SQLite (banco de dados)
+- JDBC (conexão com banco)
+- iTextPDF (geração de relatórios PDF)
 
-Atribuição de VLANs às portas (modo ACCESS, TRUNK, HYBRID)
+---
 
+## 🔐 Níveis de Usuário no Sistema
 
-Cadastro de usuários com níveis (TI, MANUTENÇÃO)
+### 👨‍💻 Nível: TI
+Acesso **total** ao sistema:
 
+- Cadastrar, editar e excluir usuários
+- Cadastrar, editar e excluir switches
+- Cadastrar, editar e excluir VLANs
+- Atribuir/remover VLANs das portas
+- Gerar relatórios PDF por switch
 
-Geração de relatório PDF filtrado por switch
+### 🔧 Nível: MANUTENÇÃO
+Acesso **restrito**:
 
+- Pode fazer tudo o que o TI faz, exceto **cadastrar usuários**
 
+---
 
-📊 Estrutura do Banco de Dados (SQLite)
-Tabelas:
+## 🧭 Como Funciona o Controle?
+
+- O login define o nível de usuário (`TI` ou `MANUTENCAO`)
+- Cada tela verifica o nível do usuário:
+  - Desabilita o menu de cadastro de usuário para `MANUTENCAO`
+  - Permite acesso total apenas ao nível `TI`
+
+---
+
+## 🧭 Estrutura do Sistema
+
+### 🔑 Tela de Login
+- Login com nome de usuário e senha
+- Nível de acesso é usado para controlar permissões
+
+### 🧑‍💼 Tela de Cadastro de Usuários
+- Cadastra novos usuários com:
+  - Nome
+  - Login
+  - Senha
+  - Nível (`TI` ou `MANUTENCAO`)
+
+### 🖥️ Tela de Cadastro de Switches
+- Cadastra switches informando:
+  - Nome
+  - Quantidade de portas
+- As portas são criadas automaticamente (1 até `qtd_portas`)
+
+### 🔌 Tela de Cadastro de VLANs
+- Cadastra VLANs com:
+  - ID numérico
+  - Nome descritivo (opcional)
+
+### 🔁 Tela de Atribuição de VLANs às Portas
+- Seleciona um switch e visualiza suas portas
+- Atribui VLANs por porta:
+  - Modo: `TAGGED` ou `UNTAGGED`
+  - Tipo da porta: `ACCESS`, `TRUNK`, `HYBRID`
+- Remove VLANs atribuídas
+
+### 📄 Tela de Relatório em PDF
+- Seleciona um switch e gera relatório PDF com:
+  - Todas as portas
+  - Tipo da porta
+  - VLANs atribuídas (ID, nome, modo)
+
+---
+
+## 🗂️ Estrutura do Banco de Dados
+
+```sql
 CREATE TABLE switch (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     nome TEXT NOT NULL,
@@ -29,7 +92,7 @@ CREATE TABLE switch (
 CREATE TABLE porta (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     numero INTEGER NOT NULL,
-    tipo TEXT NOT NULL, -- ACCESS, TRUNK, HYBRID
+    tipo TEXT NOT NULL,
     switch_id INTEGER NOT NULL,
     FOREIGN KEY (switch_id) REFERENCES switch(id)
 );
@@ -56,159 +119,3 @@ CREATE TABLE usuario (
     senha TEXT NOT NULL,
     nivel TEXT CHECK(nivel IN ('TI', 'MANUTENCAO')) NOT NULL
 );
-
-
-🚀 Funcionalidades por Tela
-1. CRUD Switch
-Cadastro de switches com nome e quantidade de portas
-
-
-Geração automática das portas numeradas sequencialmente
-
-
-2. CRUD VLANs
-Cadastro de VLANs com ID e nome
-
-
-Listagem, edição e exclusão
-
-
-3. Atribuição de VLANs
-Seleciona um switch e exibe suas portas
-
-
-Permite atribuir VLANs com modo:
-
-
-ACCESS: uma VLAN (UNTAGGED)
-
-
-TRUNK: uma VLAN nativa (UNTAGGED)
-
-
-HYBRID: duas VLANs (UNTAGGED, TAGGED)
-
-
-Atualiza tipo da porta diretamente na tabela
-
-
-Remove VLANs das portas
-
-
-4. Cadastro de Usuários
-Cadastro de usuários com nome, login, senha e nível
-
-
-Níveis: TI e MANUTENÇÃO
-
-
-Listagem, edição e exclusão
-
-
-5. Geração de Relatório
-Escolha de switch via JComboBox
-
-
-Gera PDF com todas as portas, seus tipos, e VLANs atribuídas com nome e modo
-
-
-
-🔗 Estrutura MVC
-Entity:
-Switch, Porta, Vlan, PortaVlan, Usuario
-
-
-DAO:
-Acesso direto ao banco SQLite para cada entidade
-
-
-Controller:
-Lógica intermediária entre View e DAO
-
-
-View:
-Interfaces Swing para cada funcionalidade do sistema
-
-
-
-📃 Relatório PDF
-Gera um PDF com o seguinte padrão:
-
-
-Relatório de VLANs por Porta (Switch Específico)
-
-Switch: Intelbras
-
-Porta 1 | Tipo: HYBRID | VLANs: 1 (Untagged), 100 (Tagged)
-Porta 2 | Tipo: TRUNK | VLANs: 100 (Untagged)
-...
-
-Utiliza iText para formatação e exportação do PDF
-
-
-Salvo automaticamente no diretório do usuário
-
-
-
-🔐 Acesso e Login
-A tela principal pode ser adaptada para login com base nos usuários cadastrados
-
-
-Controle de permissão por nível (ex: Manutenção não acessa atribuição ou cadastro de usuários)
-
-
-
-🚜 Executando o Projeto
-Abra o projeto no NetBeans ou IntelliJ
-
-
-Garanta que o SQLite JDBC está no classpath
-
-
-Rode a tela principal (MDI ou Menu)
-
-
-Banco de dados será lido da pasta src/banco/bancoDSOO3.db
-
-
-
-📊 Sugestão de Melhorias Futuras
-Hash de senha com bcrypt
-
-
-Interface Web com Spring Boot ou JavaFX
-
-
-Controle de permissões mais granular
-
-
-Backup/restauração do banco de dados
-
-
-
-✍️ Autor
-Nome: Giordan Ebertz, Vinicius Gonçalves.
-
-
-Projeto DSOO III - Ciência da Computação - 2025
-
-
-
-📄 Telas
-Tela de CRUD Switch
-
-
-Tela de CRUD VLANs
-
-
-Tela de Atribuição de VLANs
-
-
-Tela de Cadastro de Usuários
-
-
-Tela de Geração de Relatório
-
-
-
-
